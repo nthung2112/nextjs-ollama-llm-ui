@@ -8,6 +8,7 @@ interface ChatSession {
 }
 
 interface State {
+  isInitialized: boolean;
   base64Images: string[] | null;
   chats: Record<string, ChatSession>;
   currentChatId: string | null;
@@ -19,6 +20,7 @@ interface State {
 }
 
 interface Actions {
+  setIsInitialized: (value: boolean) => void;
   setBase64Images: (base64Images: string[] | null) => void;
   setCurrentChatId: (chatId: string) => void;
   setSelectedModel: (selectedModel: string) => void;
@@ -35,17 +37,19 @@ interface Actions {
 const useChatStore = create<State & Actions>()(
   persist(
     (set, get) => ({
+      isInitialized: false,
       base64Images: null,
       chats: {},
       currentChatId: null,
       selectedModel: null,
-      userName: "Anonymous",
+      userName: "",
       isDownloading: false,
       downloadProgress: 0,
       downloadingModel: null,
 
       setBase64Images: (base64Images) => set({ base64Images }),
       setUserName: (userName) => set({ userName }),
+      setIsInitialized: (isInitialized) => set({ isInitialized }),
 
       setCurrentChatId: (chatId) => set({ currentChatId: chatId }),
       setSelectedModel: (selectedModel) => set({ selectedModel }),
@@ -108,6 +112,7 @@ const useChatStore = create<State & Actions>()(
     {
       name: "nextjs-ollama-ui-state",
       partialize: (state) => ({
+        isInitialized: state.isInitialized,
         chats: state.chats,
         currentChatId: state.currentChatId,
         selectedModel: state.selectedModel,

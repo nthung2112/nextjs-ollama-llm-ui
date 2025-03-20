@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import React from "react";
+import useChatStore from "@/app/hooks/useChatStore";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -22,11 +23,9 @@ const formSchema = z.object({
   }),
 });
 
-interface UsernameFormProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function UsernameForm({ setOpen }: UsernameFormProps) {
+export default function UsernameForm() {
+  const setUserName = useChatStore((state) => state.setUserName);
+  const setIsInitialized = useChatStore((state) => state.setIsInitialized);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,9 +34,8 @@ export default function UsernameForm({ setOpen }: UsernameFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    localStorage.setItem("ollama_user", values.username);
-    window.dispatchEvent(new Event("storage"));
-    setOpen(false);
+    setIsInitialized(true);
+    setUserName(values.username);
   }
 
   return (

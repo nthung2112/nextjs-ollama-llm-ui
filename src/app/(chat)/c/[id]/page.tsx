@@ -1,11 +1,12 @@
 "use client";
 
 import { ChatLayout } from "@/components/chat/chat-layout";
-import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
+import React from "react";
+import { notFound, useParams } from "next/navigation";
 import useChatStore from "@/app/hooks/useChatStore";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page() {
+  const params = useParams<{ id: string }>();
   const id = params.id;
 
   const getChatById = useChatStore((state) => state.getChatById);

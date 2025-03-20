@@ -4,15 +4,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -20,11 +17,7 @@ import {
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { GearIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
-import { Skeleton } from "./ui/skeleton";
-import { set } from "zod";
-import UsernameForm from "./username-form";
+import { useState } from "react";
 import EditUsernameForm from "./edit-username-form";
 import PullModel from "./pull-model";
 import useChatStore from "@/app/hooks/useChatStore";
@@ -42,16 +35,8 @@ export default function UserSettings() {
           className="flex justify-start gap-3 w-full h-14 text-base font-normal items-center "
         >
           <Avatar className="flex justify-start items-center overflow-hidden">
-            <AvatarImage
-              src=""
-              alt="AI"
-              width={4}
-              height={4}
-              className="object-contain"
-            />
-            <AvatarFallback>
-              {userName.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
+            <AvatarImage src="" alt="AI" width={4} height={4} className="object-contain" />
+            <AvatarFallback>{userName.substring(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="text-xs truncate">
             <p>{userName}</p>

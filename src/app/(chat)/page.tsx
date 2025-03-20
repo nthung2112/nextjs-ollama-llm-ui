@@ -40,8 +40,7 @@ export default function Home() {
           <DialogHeader className="space-y-2">
             <DialogTitle>Welcome to Ollama!</DialogTitle>
             <DialogDescription>
-              Enter your name to get started. This is just to personalize your
-              experience.
+              Enter your name to get started. This is just to personalize your experience.
             </DialogDescription>
             <UsernameForm setOpen={setOpen} />
           </DialogHeader>

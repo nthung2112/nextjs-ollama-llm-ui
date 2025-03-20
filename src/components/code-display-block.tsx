@@ -15,10 +15,7 @@ export default function CodeDisplayBlock({ code }: ButtonCodeblockProps) {
   const isCopiedRef = useRef(false);
   const { theme } = useTheme();
 
-  const filteredCode = useMemo(
-    () => code.split("\n").slice(1).join("\n") || code,
-    [code]
-  );
+  const filteredCode = useMemo(() => code.split("\n").slice(1).join("\n") || code, [code]);
   const trimmedCode = useMemo(() => filteredCode.trim(), [filteredCode]);
   const language = useMemo(
     () =>
@@ -29,14 +26,10 @@ export default function CodeDisplayBlock({ code }: ButtonCodeblockProps) {
   );
 
   const customStyle = useMemo(
-    () =>
-      theme === "dark" ? { background: "#303033" } : { background: "#fcfcfc" },
+    () => (theme === "dark" ? { background: "#303033" } : { background: "#fcfcfc" }),
     [theme]
   );
-  const codeTheme = useMemo(
-    () => (theme === "dark" ? dracula : github),
-    [theme]
-  );
+  const codeTheme = useMemo(() => (theme === "dark" ? dracula : github), [theme]);
 
   const copyToClipboard = () => {
     if (isCopiedRef.current) return; // Prevent multiple triggers

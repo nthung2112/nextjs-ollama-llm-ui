@@ -7,11 +7,7 @@ import { ChatRequestOptions } from "ai";
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
 import { RefreshCcw } from "lucide-react";
 import Image from "next/image";
-import {
-  ChatBubble,
-  ChatBubbleAvatar,
-  ChatBubbleMessage,
-} from "../ui/chat/chat-bubble";
+import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "../ui/chat/chat-bubble";
 import ButtonWithTooltip from "../button-with-tooltip";
 import { Button } from "../ui/button";
 import CodeDisplayBlock from "../code-display-block";
@@ -49,7 +45,7 @@ function ChatMessage({ message, isLast, isLoading, reload }: ChatMessageProps) {
 
     return {
       thinkContent: message.role === "assistant" ? getThinkContent(message.content) : null,
-      cleanContent: message.content.replace(/<think>[\s\S]*?(?:<\/think>|$)/g, '').trim(),
+      cleanContent: message.content.replace(/<think>[\s\S]*?(?:<\/think>|$)/g, "").trim(),
     };
   }, [message.content, message.role]);
 
@@ -78,8 +74,9 @@ function ChatMessage({ message, isLast, isLoading, reload }: ChatMessageProps) {
     </div>
   );
 
-  const renderThinkingProcess = () => (
-    thinkContent && message.role === "assistant" && (
+  const renderThinkingProcess = () =>
+    thinkContent &&
+    message.role === "assistant" && (
       <details className="mb-2 text-sm" open>
         <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
           Thinking process
@@ -88,32 +85,27 @@ function ChatMessage({ message, isLast, isLoading, reload }: ChatMessageProps) {
           <Markdown remarkPlugins={[remarkGfm]}>{thinkContent}</Markdown>
         </div>
       </details>
-    )
-  );
+    );
 
-  const renderContent = () => (
-    contentParts.map((part, index) => (
+  const renderContent = () =>
+    contentParts.map((part, index) =>
       index % 2 === 0 ? (
-        <Markdown key={index} remarkPlugins={[remarkGfm]}>{part}</Markdown>
+        <Markdown key={index} remarkPlugins={[remarkGfm]}>
+          {part}
+        </Markdown>
       ) : (
         <pre className="whitespace-pre-wrap" key={index}>
           <CodeDisplayBlock code={part} />
         </pre>
       )
-    ))
-  );
+    );
 
-  const renderActionButtons = () => (
+  const renderActionButtons = () =>
     message.role === "assistant" && (
       <div className="pt-2 flex gap-1 items-center text-muted-foreground">
         {!isLoading && (
           <ButtonWithTooltip side="bottom" toolTipText="Copy">
-            <Button
-              onClick={handleCopy}
-              variant="ghost"
-              size="icon"
-              className="h-4 w-4"
-            >
+            <Button onClick={handleCopy} variant="ghost" size="icon" className="h-4 w-4">
               {isCopied ? (
                 <CheckIcon className="w-3.5 h-3.5 transition-all" />
               ) : (
@@ -124,19 +116,13 @@ function ChatMessage({ message, isLast, isLoading, reload }: ChatMessageProps) {
         )}
         {!isLoading && isLast && (
           <ButtonWithTooltip side="bottom" toolTipText="Regenerate">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-4 w-4"
-              onClick={() => reload()}
-            >
+            <Button variant="ghost" size="icon" className="h-4 w-4" onClick={() => reload()}>
               <RefreshCcw className="w-3.5 h-3.5 scale-100 transition-all" />
             </Button>
           </ButtonWithTooltip>
         )}
       </div>
-    )
-  );
+    );
 
   return (
     <motion.div {...MOTION_CONFIG} className="flex flex-col gap-2 whitespace-pre-wrap">

@@ -42,7 +42,7 @@ const useChatStore = create<State & Actions>()(
       userName: "Anonymous",
       isDownloading: false,
       downloadProgress: 0,
-      downloadingModel: null, 
+      downloadingModel: null,
 
       setBase64Images: (base64Images) => set({ base64Images }),
       setUserName: (userName) => set({ userName }),
@@ -79,9 +79,7 @@ const useChatStore = create<State & Actions>()(
 
           // If messageId is provided, delete specific message
           if (messageId) {
-            const updatedMessages = chat.messages.filter(
-              (message) => message.id !== messageId
-            );
+            const updatedMessages = chat.messages.filter((message) => message.id !== messageId);
             return {
               chats: {
                 ...state.chats,

@@ -25,8 +25,7 @@ const useSpeechToText = (options: SpeechRecognitionOptions = {}) => {
     recognition.continuous = options.continuous || false;
 
     if ("webkitSpeechGrammarList" in window) {
-      const grammar =
-        "#JSGF V1.0; grammar punctuation; public <punc> = . | , | ! | ; | : ;";
+      const grammar = "#JSGF V1.0; grammar punctuation; public <punc> = . | , | ! | ; | : ;";
       const speechRecognitionList = new window.webkitSpeechGrammarList();
       speechRecognitionList.addFromString(grammar, 1);
       recognition.grammars = speechRecognitionList;
@@ -35,8 +34,8 @@ const useSpeechToText = (options: SpeechRecognitionOptions = {}) => {
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       let text = "";
 
-      for (let i = 0; i < event.results.length; i++) {
-        text += event.results[i][0].transcript;
+      for (const result of event.results) {
+        text += result[0].transcript;
       }
 
       // Always capitalize the first letter

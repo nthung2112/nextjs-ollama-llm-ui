@@ -1,24 +1,15 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { ChatProps } from "./chat";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "../ui/button";
-import TextareaAutosize from "react-textarea-autosize";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Cross2Icon,
-  ImageIcon,
-  PaperPlaneIcon,
-  StopIcon,
-} from "@radix-ui/react-icons";
+import { Button } from "../ui/button";
+import { AnimatePresence } from "framer-motion";
+import { Cross2Icon, StopIcon } from "@radix-ui/react-icons";
 import { Mic, SendHorizonal } from "lucide-react";
 import useSpeechToText from "@/app/hooks/useSpeechRecognition";
 import MultiImagePicker from "../image-embedder";
 import useChatStore from "@/app/hooks/useChatStore";
 import Image from "next/image";
-import { ChatRequestOptions, Message } from "ai";
+import { ChatRequestOptions } from "ai";
 import { ChatInput } from "../ui/chat/chat-input";
 
 interface ChatBottombarProps {
@@ -53,8 +44,9 @@ export default function ChatBottombar({
     }
   };
 
-  const { isListening, transcript, startListening, stopListening } =
-    useSpeechToText({ continuous: true });
+  const { isListening, transcript, startListening, stopListening } = useSpeechToText({
+    continuous: true,
+  });
 
   const listen = () => {
     isListening ? stopVoiceInput() : startListening();
@@ -125,17 +117,12 @@ export default function ChatBottombar({
             ) : (
               // Default state
               <div className="flex w-full justify-between">
-                <MultiImagePicker
-                  disabled={isLoading}
-                  onImagesPick={setBase64Images}
-                />
+                <MultiImagePicker disabled={isLoading} onImagesPick={setBase64Images} />
                 <div>
                   {/* Microphone button with animation when listening */}
                   <Button
                     className={`shrink-0 rounded-full ${
-                      isListening
-                        ? "relative bg-blue-500/30 hover:bg-blue-400/30"
-                        : ""
+                      isListening ? "relative bg-blue-500/30 hover:bg-blue-400/30" : ""
                     }`}
                     variant="ghost"
                     size="icon"
@@ -155,12 +142,7 @@ export default function ChatBottombar({
                     variant="ghost"
                     size="icon"
                     type="submit"
-                    disabled={
-                      isLoading ||
-                      !input.trim() ||
-                      isListening ||
-                      !selectedModel
-                    }
+                    disabled={isLoading || !input.trim() || isListening || !selectedModel}
                   >
                     <SendHorizonal className="w-5 h-5" />
                   </Button>

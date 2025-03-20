@@ -117,12 +117,7 @@ export default function Chat({ initialMessages, id, isMobile }: ChatProps) {
 
   return (
     <div className="flex flex-col w-full max-w-3xl h-full">
-      <ChatTopbar
-        isLoading={isLoading}
-        chatId={id}
-        messages={messages}
-        setMessages={setMessages}
-      />
+      <ChatTopbar isLoading={isLoading} chatId={id} messages={messages} setMessages={setMessages} />
 
       {messages.length === 0 ? (
         <div className="flex flex-col h-full w-full items-center gap-4 justify-center">
@@ -133,9 +128,7 @@ export default function Chat({ initialMessages, id, isMobile }: ChatProps) {
             height={40}
             className="h-16 w-14 object-contain dark:invert"
           />
-          <p className="text-center text-base text-muted-foreground">
-            How can I help you today?
-          </p>
+          <p className="text-center text-base text-muted-foreground">How can I help you today?</p>
           <ChatBottombar
             input={input}
             handleInputChange={handleInputChange}

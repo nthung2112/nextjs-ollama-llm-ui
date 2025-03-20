@@ -77,11 +77,7 @@ export default function PullModelForm() {
       toast.success("Model pulled successfully");
       router.refresh();
     } catch (error) {
-      toast.error(
-        `Error: ${
-          error instanceof Error ? error.message : "Failed to pull model"
-        }`
-      );
+      toast.error(`Error: ${error instanceof Error ? error.message : "Failed to pull model"}`);
     } finally {
       stopDownload();
       throttledSetProgress.cancel();
@@ -111,12 +107,8 @@ export default function PullModelForm() {
             throw new Error(responseJson.error);
           }
 
-          if (
-            responseJson.completed !== undefined &&
-            responseJson.total !== undefined
-          ) {
-            const progress =
-              (responseJson.completed / responseJson.total) * 100;
+          if (responseJson.completed !== undefined && responseJson.total !== undefined) {
+            const progress = (responseJson.completed / responseJson.total) * 100;
             throttledSetProgress(progress);
           }
 
@@ -145,12 +137,7 @@ export default function PullModelForm() {
             <FormItem>
               <FormLabel>Model name</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="llama2"
-                  value={field.value || ""}
-                />
+                <Input {...field} type="text" placeholder="llama2" value={field.value || ""} />
               </FormControl>
               <p className="text-xs pt-1">
                 Check the{" "}
@@ -165,17 +152,12 @@ export default function PullModelForm() {
               </p>
               <FormMessage />
               <div className="space-y-2 w-full">
-                <Button
-                  type="submit"
-                  className="w-full "
-                  disabled={isDownloading}
-                >
+                <Button type="submit" className="w-full " disabled={isDownloading}>
                   {isDownloading ? (
                     <div className="flex items-center gap-2">
                       <Loader2Icon className="animate-spin w-4 h-4" />
                       <span>
-                        Pulling {downloadingModel}...{" "}
-                        {downloadProgress.toFixed(0)}%
+                        Pulling {downloadingModel}... {downloadProgress.toFixed(0)}%
                       </span>
                     </div>
                   ) : (

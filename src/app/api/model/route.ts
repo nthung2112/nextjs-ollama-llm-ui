@@ -4,7 +4,7 @@ export async function POST(req: Request) {
 
   const ollamaUrl = process.env.OLLAMA_URL;
 
-  const response = await fetch(ollamaUrl + "/api/pull", {
+  const response = await fetch(`${ollamaUrl}/api/pull`, {
     method: "POST",
     body: JSON.stringify({ name }),
   });

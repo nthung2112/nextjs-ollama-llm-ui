@@ -1,11 +1,5 @@
 import React, { forwardRef } from "react";
-import { Button } from "./ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ButtonWithTooltipProps {
   children: React.ReactElement;
@@ -18,9 +12,7 @@ const ButtonWithTooltip = forwardRef<HTMLDivElement, ButtonWithTooltipProps>(
     return (
       <TooltipProvider>
         <Tooltip delayDuration={0}>
-          <TooltipTrigger asChild>
-            {React.cloneElement(children, { ref })}
-          </TooltipTrigger>
+          <TooltipTrigger asChild>{React.cloneElement(children, { ref })}</TooltipTrigger>
           <TooltipContent side={side}>
             <div>{toolTipText}</div>
           </TooltipContent>

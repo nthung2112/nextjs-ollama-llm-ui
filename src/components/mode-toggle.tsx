@@ -9,10 +9,7 @@ export function ModeToggle() {
   const { setTheme, theme } = useTheme();
 
   return (
-    <div
-      defaultValue={theme}
-      className="flex gap-2 *:transition-all *:duration-300"
-    >
+    <div defaultValue={theme} className="flex gap-2 *:transition-all *:duration-300">
       <Button
         variant={theme === "system" ? "default" : "outline"}
         className={clsx("space-x-2 w-full ", { "rounded-full": theme === "system" })}

@@ -69,7 +69,7 @@ export default function ChatBottombar({
   }, [inputRef]);
 
   return (
-    <div className="px-4 pb-7 flex justify-between w-full items-center relative ">
+    <div className="px-4 pb-7 flex justify-between w-full items-center relative mx-auto max-w-3xl">
       <AnimatePresence initial={false}>
         <form
           onSubmit={handleSubmit}

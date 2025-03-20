@@ -111,7 +111,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
   };
 
   return (
-    <div className="flex flex-col w-full max-w-3xl h-full">
+    <div className="flex flex-col min-w-0 h-dvh bg-background">
       <ChatTopbar isLoading={isLoading} chatId={id} messages={messages} setMessages={setMessages} />
 
       {messages.length === 0 ? (

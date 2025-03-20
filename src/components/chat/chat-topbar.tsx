@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { CaretSortIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Message } from "ai/react";
 
 import useChatStore from "@/app/hooks/useChatStore";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import { Button } from "../ui/button";
-import { SidebarTrigger } from "../ui/sidebar";
+import { SidebarTrigger, useSidebar } from "../ui/sidebar";
+import { useRouter } from "next/navigation";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface ChatTopbarProps {
   isLoading: boolean;
@@ -22,6 +24,8 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
   const [open, setOpen] = React.useState(false);
   const selectedModel = useChatStore((state) => state.selectedModel);
   const setSelectedModel = useChatStore((state) => state.setSelectedModel);
+  const router = useRouter();
+  const { open: sidebarOpen, isMobile } = useSidebar();
 
   useEffect(() => {
     (async () => {
@@ -45,8 +49,27 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
   };
 
   return (
-    <div className="w-full flex px-4 py-6 items-center justify-between lg:justify-center ">
-      <SidebarTrigger />
+    <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
+      <SidebarTrigger className="p-4" />
+
+      {(!sidebarOpen || isMobile) && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              className="md:px-2 px-2 md:h-fit ml-auto md:ml-0"
+              onClick={() => {
+                router.push("/");
+                router.refresh();
+              }}
+            >
+              <PlusIcon />
+              <span className="md:sr-only">New Chat</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>New Chat</TooltipContent>
+        </Tooltip>
+      )}
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -82,6 +105,6 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
           )}
         </PopoverContent>
       </Popover>
-    </div>
+    </header>
   );
 }

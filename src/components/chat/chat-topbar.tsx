@@ -1,21 +1,14 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { Message } from "ai/react";
+
+import useChatStore from "@/app/hooks/useChatStore";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 import { Button } from "../ui/button";
-import { CaretSortIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { Sidebar } from "../sidebar";
-import { Message } from "ai/react";
-import useChatStore from "@/app/hooks/useChatStore";
+import { SidebarTrigger } from "../ui/sidebar";
 
 interface ChatTopbarProps {
   isLoading: boolean;
@@ -27,7 +20,6 @@ interface ChatTopbarProps {
 export default function ChatTopbar({ isLoading, chatId, messages, setMessages }: ChatTopbarProps) {
   const [models, setModels] = React.useState<string[]>([]);
   const [open, setOpen] = React.useState(false);
-  const [sheetOpen, setSheetOpen] = React.useState(false);
   const selectedModel = useChatStore((state) => state.selectedModel);
   const setSelectedModel = useChatStore((state) => state.setSelectedModel);
 
@@ -52,26 +44,9 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
     setOpen(false);
   };
 
-  const handleCloseSidebar = () => {
-    setSheetOpen(false);
-  };
-
   return (
     <div className="w-full flex px-4 py-6 items-center justify-between lg:justify-center ">
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetTrigger>
-          <HamburgerMenuIcon className="lg:hidden w-5 h-5" />
-        </SheetTrigger>
-        <SheetContent side="left">
-          <Sidebar
-            chatId={chatId || ""}
-            isCollapsed={false}
-            isMobile={false}
-            messages={messages}
-            closeSidebar={handleCloseSidebar}
-          />
-        </SheetContent>
-      </Sheet>
+      <SidebarTrigger />
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>

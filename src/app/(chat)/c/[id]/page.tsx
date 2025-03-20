@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatLayout } from "@/components/chat/chat-layout";
+import { ChatLayout } from "@/components/chat-layout";
 import React from "react";
 import { notFound, useParams } from "next/navigation";
 import useChatStore from "@/app/hooks/useChatStore";

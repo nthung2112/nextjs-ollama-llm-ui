@@ -14,10 +14,9 @@ import Image from "next/image";
 export interface ChatProps {
   id: string;
   initialMessages: Message[] | [];
-  isMobile?: boolean;
 }
 
-export default function Chat({ initialMessages, id, isMobile }: ChatProps) {
+export default function Chat({ initialMessages, id }: ChatProps) {
   const {
     messages,
     input,

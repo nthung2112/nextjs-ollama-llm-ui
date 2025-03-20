@@ -24,11 +24,7 @@ const formSchema = z.object({
   }),
 });
 
-interface EditUsernameFormProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function EditUsernameForm({ setOpen }: EditUsernameFormProps) {
+export default function EditUsernameForm() {
   const userName = useChatStore((state) => state.userName);
   const setUserName = useChatStore((state) => state.setUserName);
 

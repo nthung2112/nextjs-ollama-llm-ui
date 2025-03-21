@@ -64,7 +64,6 @@ export default function ChatBottombar({
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
-      console.log("Input focused");
     }
   }, [inputRef]);
 

@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import UserSettings from "./user-settings";
 import {
   Dialog,
   DialogClose,
@@ -43,13 +42,13 @@ interface SidebarProps {
 
 export function AppSidebar({ chatId }: SidebarProps) {
   const router = useRouter();
-  const { setOpenMobile, isMobile, open } = useSidebar();
-  const chats = useChatStore((state) => state.chats);
-  const handleDelete = useChatStore((state) => state.handleDelete);
-
-  const chatContents = Object.entries(chats).sort(
-    ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  const { setOpenMobile } = useSidebar();
+  const chats = useChatStore((state) =>
+    Object.entries(state.chats).sort(
+      ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
   );
+  const handleDelete = useChatStore((state) => state.handleDelete);
 
   return (
     <Sidebar className="group-data-[side=left]:border-r-0">
@@ -90,7 +89,7 @@ export function AppSidebar({ chatId }: SidebarProps) {
           <SidebarGroupLabel>Your chats</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {chatContents.map(([id, chat]) => (
+              {chats.map(([id, chat]) => (
                 <SidebarMenuItem key={id}>
                   <SidebarMenuButton asChild isActive={id === chatId}>
                     <Link key={id} href={`/c/${id}`}>

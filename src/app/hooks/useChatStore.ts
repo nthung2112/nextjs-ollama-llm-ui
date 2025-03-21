@@ -1,6 +1,6 @@
-import { CoreMessage, generateId, Message } from "ai";
+import { Message } from "ai";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 interface ChatSession {
   messages: Message[];

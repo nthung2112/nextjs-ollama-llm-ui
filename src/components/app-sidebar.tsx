@@ -43,12 +43,12 @@ interface SidebarProps {
 export function AppSidebar({ chatId }: SidebarProps) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
-  const chats = useChatStore((state) =>
-    Object.entries(state.chats).sort(
-      ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-  );
+  const allChats = useChatStore((state) => state.chats);
   const handleDelete = useChatStore((state) => state.handleDelete);
+
+  const chats = Object.entries(allChats).sort(
+    ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   return (
     <Sidebar className="group-data-[side=left]:border-r-0">
@@ -62,7 +62,13 @@ export function AppSidebar({ chatId }: SidebarProps) {
               }}
               className="flex flex-row gap-3 items-center px-2"
             >
-              <Image src="/ollama.png" alt="AI" width={28} height={28} className="dark:invert" />
+              <Image
+                src="/google-ai.png"
+                alt="AI"
+                width={28}
+                height={28}
+                className="object-contain"
+              />
             </Link>
             <Tooltip>
               <TooltipTrigger asChild>

@@ -1,5 +1,5 @@
-import { createOllama } from "ollama-ai-provider";
-import { streamText, convertToCoreMessages, CoreMessage, UserContent } from "ai";
+import { google } from "@ai-sdk/google";
+import { streamText, convertToCoreMessages, UserContent } from "ai";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -8,25 +8,25 @@ export async function POST(req: Request) {
   // Destructure request data
   const { messages, selectedModel, data } = await req.json();
 
-  const ollamaUrl = process.env.OLLAMA_URL;
+  const model = google(selectedModel);
 
   const initialMessages = messages.slice(0, -1);
   const currentMessage = messages[messages.length - 1];
 
-  const ollama = createOllama({ baseURL: `${ollamaUrl}/api` });
-
   // Build message content array directly
   const messageContent: UserContent = [{ type: "text", text: currentMessage.content }];
 
-  // Add images if they exist
-  data?.images?.forEach((imageUrl: string) => {
-    const image = new URL(imageUrl);
-    messageContent.push({ type: "image", image });
-  });
+  // Add images if they exist and if using vision model
+  if (data?.images?.length && selectedModel === "gemini-pro-vision") {
+    data.images.forEach((imageUrl: string) => {
+      const image = new URL(imageUrl);
+      messageContent.push({ type: "image", image });
+    });
+  }
 
-  // Stream text using the ollama model
+  // Stream text using the Google AI model
   const result = streamText({
-    model: ollama(selectedModel),
+    model: model,
     messages: [
       ...convertToCoreMessages(initialMessages),
       { role: "user", content: messageContent },

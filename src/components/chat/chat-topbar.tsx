@@ -20,7 +20,12 @@ interface ChatTopbarProps {
 }
 
 export default function ChatTopbar({ isLoading, chatId, messages, setMessages }: ChatTopbarProps) {
-  const [models, setModels] = React.useState<string[]>([]);
+  const models = [
+    "gemini-2.0-flash-001",
+    "gemini-1.5-pro-latest",
+    "gemini-1.5-flash-latest",
+    "gemini-1.5-flash-8b-latest",
+  ];
   const [open, setOpen] = React.useState(false);
   const selectedModel = useChatStore((state) => state.selectedModel);
   const setSelectedModel = useChatStore((state) => state.setSelectedModel);
@@ -28,20 +33,11 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
   const { open: sidebarOpen, isMobile } = useSidebar();
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch("/api/tags");
-        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-
-        const data = await res.json().catch(() => null);
-        if (!data?.models?.length) return;
-
-        setModels(data.models.map(({ name }: { name: string }) => name));
-      } catch (error) {
-        console.error("Error fetching models:", error);
-      }
-    })();
-  }, []);
+    // Set default model if none selected
+    if (!selectedModel) {
+      setSelectedModel("gemini-2.0-flash-001");
+    }
+  }, [selectedModel, setSelectedModel]);
 
   const handleModelChange = (model: string) => {
     setSelectedModel(model);
@@ -49,9 +45,8 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
   };
 
   return (
-    <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
-      <SidebarTrigger className="p-4" />
-
+    <div className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
+      <SidebarTrigger />
       {(!sidebarOpen || isMobile) && (
         <Tooltip>
           <TooltipTrigger asChild>
@@ -71,40 +66,30 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
         </Tooltip>
       )}
 
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            disabled={isLoading}
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-[300px] justify-between"
-          >
-            {selectedModel || "Select model"}
-            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[300px] p-1">
-          {models.length > 0 ? (
-            models.map((model) => (
-              <Button
-                key={model}
-                variant="ghost"
-                className="w-full"
-                onClick={() => {
-                  handleModelChange(model);
-                }}
-              >
-                {model}
-              </Button>
-            ))
-          ) : (
-            <Button variant="ghost" disabled className=" w-full">
-              No models available
+      <div className="flex items-center gap-2">
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" className="gap-2">
+              {selectedModel || "Select a model"}
+              <CaretSortIcon />
             </Button>
-          )}
-        </PopoverContent>
-      </Popover>
-    </header>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-2" align="start">
+            <div className="flex flex-col gap-2">
+              {models.map((model) => (
+                <Button
+                  key={model}
+                  variant={selectedModel === model ? "secondary" : "ghost"}
+                  className="justify-start"
+                  onClick={() => handleModelChange(model)}
+                >
+                  {model}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+    </div>
   );
 }

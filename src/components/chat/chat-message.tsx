@@ -1,7 +1,5 @@
 import React, { memo, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { Message } from "ai/react";
 import { ChatRequestOptions } from "ai";
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
@@ -11,6 +9,7 @@ import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "../ui/chat/chat
 import ButtonWithTooltip from "../button-with-tooltip";
 import { Button } from "../ui/button";
 import CodeDisplayBlock from "../code-display-block";
+import { Markdown } from "../markdown";
 
 export type ChatMessageProps = {
   message: Message;
@@ -82,7 +81,7 @@ function ChatMessage({ message, isLast, isLoading, reload }: ChatMessageProps) {
           Thinking process
         </summary>
         <div className="mt-2 text-muted-foreground">
-          <Markdown remarkPlugins={[remarkGfm]}>{thinkContent}</Markdown>
+          <Markdown>{thinkContent}</Markdown>
         </div>
       </details>
     );
@@ -90,9 +89,7 @@ function ChatMessage({ message, isLast, isLoading, reload }: ChatMessageProps) {
   const renderContent = () =>
     contentParts.map((part, index) =>
       index % 2 === 0 ? (
-        <Markdown key={index} remarkPlugins={[remarkGfm]}>
-          {part}
-        </Markdown>
+        <Markdown key={index}>{part}</Markdown>
       ) : (
         <pre className="whitespace-pre-wrap" key={index}>
           <CodeDisplayBlock code={part} />
@@ -125,7 +122,7 @@ function ChatMessage({ message, isLast, isLoading, reload }: ChatMessageProps) {
     );
 
   return (
-    <motion.div {...MOTION_CONFIG} className="flex flex-col gap-2 whitespace-pre-wrap">
+    <motion.div {...MOTION_CONFIG} className="flex flex-col gap-2">
       <ChatBubble variant={message.role === "user" ? "sent" : "received"}>
         <ChatBubbleAvatar
           src={message.role === "assistant" ? "/ollama.png" : ""}

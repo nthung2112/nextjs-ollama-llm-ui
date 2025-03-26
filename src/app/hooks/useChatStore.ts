@@ -35,6 +35,7 @@ interface Actions {
   startDownload: (modelName: string) => void;
   stopDownload: () => void;
   setDownloadProgress: (progress: number) => void;
+  reset: () => void;
 }
 
 const useChatStore = create<State & Actions>()(
@@ -132,6 +133,13 @@ const useChatStore = create<State & Actions>()(
       stopDownload: () =>
         set({ isDownloading: false, downloadingModel: null, downloadProgress: 0 }),
       setDownloadProgress: (progress) => set({ downloadProgress: progress }),
+      reset: () => {
+        set({
+          base64Images: null,
+          chats: {},
+          currentChatId: null,
+        });
+      },
     }),
     {
       name: "nextjs-ollama-ui-state",

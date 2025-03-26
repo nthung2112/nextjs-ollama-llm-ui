@@ -1,7 +1,10 @@
 "use client";
 
-import { MoreVerticalIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { GearIcon } from "@radix-ui/react-icons";
+import { MoreVerticalIcon, ZapOff } from "lucide-react";
 
+import useChatStore from "@/app/hooks/useChatStore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -10,14 +13,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import useChatStore from "@/app/hooks/useChatStore";
-import PullModel from "./pull-model";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { GearIcon } from "@radix-ui/react-icons";
+
 import EditUsernameForm from "./edit-username-form";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 export function NavUser() {
   const userName = useChatStore((state) => state.userName);
+  const reset = useChatStore((state) => state.reset);
+  const router = useRouter();
+
+  const handleClearAll = () => {
+    const confirmation = confirm("Are you sure you want to clear all chats?");
+    if (confirmation) {
+      reset();
+      router.push("/");
+    }
+  };
 
   return (
     <SidebarMenu>
@@ -44,8 +55,11 @@ export function NavUser() {
             align="center"
             sideOffset={4}
           >
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <PullModel />
+            <DropdownMenuItem onSelect={handleClearAll}>
+              <div className="flex w-full gap-2 p-1 items-center cursor-pointer">
+                <ZapOff className="w-4 h-4" />
+                <p>Clear all</p>
+              </div>
             </DropdownMenuItem>
             <Dialog>
               <DialogTrigger className="w-full">

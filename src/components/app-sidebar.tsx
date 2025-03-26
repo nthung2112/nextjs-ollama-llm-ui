@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { MoreHorizontal, PlusIcon, Trash2 } from "lucide-react";
+import {
+  BrainCog,
+  FileCode,
+  Globe,
+  MoreHorizontal,
+  PlusIcon,
+  SpellCheck2,
+  Trash2,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -40,15 +48,49 @@ interface SidebarProps {
   chatId: string;
 }
 
+const roles = [
+  {
+    name: "Translator English",
+    id: "translate-english",
+    key: "translator",
+    icon: () => <Globe />,
+  },
+  {
+    name: "Check Grammar",
+    id: "check-grammar",
+    key: "grammar",
+    icon: () => <SpellCheck2 />,
+  },
+  {
+    name: "Dev Code",
+    id: "dev-code",
+    key: "developer",
+    icon: () => <FileCode />,
+  },
+  {
+    name: "Auto Correct",
+    id: "auto-correct",
+    key: "correct",
+    icon: () => <BrainCog />,
+  },
+];
+
 export function AppSidebar({ chatId }: SidebarProps) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
   const allChats = useChatStore((state) => state.chats);
   const handleDelete = useChatStore((state) => state.handleDelete);
+  const createNewChat = useChatStore((state) => state.createNewChat);
 
-  const chats = Object.entries(allChats).sort(
-    ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  const chats = Object.entries(allChats)
+    .filter(([, chat]) => !chat.role)
+    .sort(([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  const openDefaultChat = (role: { id: string; key: string }) => () => {
+    setOpenMobile(false);
+    createNewChat(role.id, role.key);
+    router.push(`/c/${role.id}`);
+  };
 
   return (
     <Sidebar className="group-data-[side=left]:border-r-0">
@@ -62,13 +104,7 @@ export function AppSidebar({ chatId }: SidebarProps) {
               }}
               className="flex flex-row gap-3 items-center px-2"
             >
-              <Image
-                src="/google-ai.png"
-                alt="AI"
-                width={28}
-                height={28}
-                className="object-contain"
-              />
+              <Image src="/ollama.png" alt="AI" width={28} height={28} className="object-contain" />
             </Link>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -91,6 +127,21 @@ export function AppSidebar({ chatId }: SidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Default chat</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {roles.map((role) => (
+                <SidebarMenuItem key={role.name}>
+                  <SidebarMenuButton onClick={openDefaultChat(role)} isActive={role.id === chatId}>
+                    <role.icon />
+                    <span>{role.name}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Your chats</SidebarGroupLabel>
           <SidebarGroupContent>

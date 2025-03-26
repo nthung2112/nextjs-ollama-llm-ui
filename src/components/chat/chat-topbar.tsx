@@ -52,7 +52,7 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
           <TooltipTrigger asChild>
             <Button
               variant="outline"
-              className="md:px-2 px-2 md:h-fit ml-auto md:ml-0"
+              className="px-1 h-7 ml-auto md:ml-0"
               onClick={() => {
                 router.push("/");
                 router.refresh();

@@ -9,12 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import useChatStore from "@/app/hooks/useChatStore";
 import PullModel from "./pull-model";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
@@ -22,7 +17,6 @@ import { GearIcon } from "@radix-ui/react-icons";
 import EditUsernameForm from "./edit-username-form";
 
 export function NavUser() {
-  const { isMobile } = useSidebar();
   const userName = useChatStore((state) => state.userName);
 
   return (

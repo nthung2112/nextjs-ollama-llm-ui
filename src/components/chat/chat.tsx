@@ -54,6 +54,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
   const selectedModel = useChatStore((state) => state.selectedModel);
   const saveMessages = useChatStore((state) => state.saveMessages);
   const getMessagesById = useChatStore((state) => state.getMessagesById);
+  const getRoleById = useChatStore((state) => state.getRoleById);
   const router = useRouter();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -82,7 +83,8 @@ export default function Chat({ initialMessages, id }: ChatProps) {
 
     const requestOptions: ChatRequestOptions = {
       body: {
-        selectedModel: selectedModel,
+        selectedModel,
+        role: getRoleById(id),
       },
       ...(base64Images && {
         data: {

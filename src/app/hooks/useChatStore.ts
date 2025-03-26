@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 interface ChatSession {
   messages: Message[];
   createdAt: string;
+  role: string;
 }
 
 interface State {
@@ -25,7 +26,9 @@ interface Actions {
   setCurrentChatId: (chatId: string) => void;
   setSelectedModel: (selectedModel: string) => void;
   getChatById: (chatId: string) => ChatSession | undefined;
+  getRoleById: (chatId: string) => string | undefined;
   getMessagesById: (chatId: string) => Message[];
+  createNewChat: (chatId: string, role: string) => void;
   saveMessages: (chatId: string, messages: Message[]) => void;
   handleDelete: (chatId: string, messageId?: string) => void;
   setUserName: (userName: string) => void;
@@ -57,9 +60,29 @@ const useChatStore = create<State & Actions>()(
         const state = get();
         return state.chats[chatId];
       },
+      getRoleById: (chatId) => {
+        const state = get();
+        return state.chats[chatId]?.role;
+      },
       getMessagesById: (chatId) => {
         const state = get();
         return state.chats[chatId]?.messages || [];
+      },
+      createNewChat: (chatId, role) => {
+        set((state) => {
+          const existingChat = state.chats[chatId];
+
+          return {
+            chats: {
+              ...state.chats,
+              [chatId]: {
+                messages: existingChat?.messages || [],
+                createdAt: existingChat?.createdAt || new Date().toISOString(),
+                role,
+              },
+            },
+          };
+        });
       },
       saveMessages: (chatId, messages) => {
         set((state) => {
@@ -71,6 +94,7 @@ const useChatStore = create<State & Actions>()(
               [chatId]: {
                 messages: [...messages],
                 createdAt: existingChat?.createdAt || new Date().toISOString(),
+                role: existingChat?.role,
               },
             },
           };

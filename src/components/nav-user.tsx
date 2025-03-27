@@ -27,6 +27,7 @@ export function NavUser() {
     if (confirmation) {
       reset();
       router.push("/");
+      router.refresh();
     }
   };
 

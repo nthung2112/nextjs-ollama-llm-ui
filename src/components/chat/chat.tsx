@@ -59,7 +59,10 @@ export default function Chat({ initialMessages, id }: ChatProps) {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    window.history.replaceState({}, "", `/c/${id}`);
+
+    if (location.pathname !== `/c/${id}`) {
+      window.history.replaceState({}, "", `/c/${id}`);
+    }
 
     if (!selectedModel) {
       toast.error("Please select a model");
@@ -146,7 +149,8 @@ export default function Chat({ initialMessages, id }: ChatProps) {
 
               const requestOptions: ChatRequestOptions = {
                 body: {
-                  selectedModel: selectedModel,
+                  selectedModel,
+                  role: getRoleById(id),
                 },
               };
 

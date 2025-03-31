@@ -43,6 +43,7 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import useChatStore from "@/app/hooks/useChatStore";
 import { NavUser } from "./nav-user";
+import { triggerCustomEvent } from "@/app/hooks/useCustomEvent";
 
 interface SidebarProps {
   chatId: string;
@@ -81,6 +82,7 @@ export function AppSidebar({ chatId }: SidebarProps) {
   const allChats = useChatStore((state) => state.chats);
   const handleDelete = useChatStore((state) => state.handleDelete);
   const createNewChat = useChatStore((state) => state.createNewChat);
+  const saveMessages = useChatStore((state) => state.saveMessages);
 
   const chats = Object.entries(allChats)
     .filter(([, chat]) => !chat.role)
@@ -104,7 +106,13 @@ export function AppSidebar({ chatId }: SidebarProps) {
               }}
               className="flex flex-row gap-3 items-center px-2"
             >
-              <Image src="/ollama.png" alt="AI" width={28} height={28} className="object-contain" />
+              <Image
+                src="/ollama.png"
+                alt="AI"
+                width={28}
+                height={28}
+                className="object-contain dark:invert"
+              />
             </Link>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -137,6 +145,53 @@ export function AppSidebar({ chatId }: SidebarProps) {
                     <role.icon />
                     <span>{role.name}</span>
                   </SidebarMenuButton>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuAction>
+                        <MoreHorizontal />
+                      </SidebarMenuAction>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side="right" align="start">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="w-full flex gap-2 hover:text-red-500 text-red-500 justify-start items-center"
+                          >
+                            <Trash2 className="shrink-0 w-4 h-4" />
+                            Clear chat
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader className="space-y-4">
+                            <DialogTitle>Clear chat?</DialogTitle>
+                            <DialogDescription>
+                              Are you sure you want to clear this chat? This action cannot be
+                              undone.
+                            </DialogDescription>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button variant="outline">Cancel</Button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <Button
+                                  variant="destructive"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    triggerCustomEvent("reset-chat", {
+                                      chatId,
+                                    });
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                              </DialogClose>
+                            </DialogFooter>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

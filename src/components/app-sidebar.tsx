@@ -9,6 +9,7 @@ import {
   Globe,
   MoreHorizontal,
   PlusIcon,
+  Shell,
   SpellCheck2,
   Trash2,
 } from "lucide-react";
@@ -73,6 +74,12 @@ const roles = [
     id: "auto-correct",
     key: "correct",
     icon: () => <BrainCog />,
+  },
+  {
+    name: "Auto Detect",
+    id: "auto-detect",
+    key: "autocheck",
+    icon: () => <Shell />,
   },
 ];
 

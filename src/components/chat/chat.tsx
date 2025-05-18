@@ -154,7 +154,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
       ) : (
         <>
           <ChatList
-            role={role}
+            id={id}
             messages={messages}
             isLoading={isLoading}
             loadingSubmit={loadingSubmit}

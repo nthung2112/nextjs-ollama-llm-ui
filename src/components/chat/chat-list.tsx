@@ -18,17 +18,17 @@ import { Textarea } from "@/components/ui/textarea";
 import useChatStore from "@/app/hooks/useChatStore";
 
 interface ChatListProps {
-  role: string;
+  id: string;
   messages: Message[];
   isLoading: boolean;
   loadingSubmit?: boolean;
   reload: (chatRequestOptions?: ChatRequestOptions) => Promise<string | null | undefined>;
 }
 
-function PromptEditModal({ role }: { role: string }) {
+function PromptEditModal({ id }: { id: string }) {
   const systemPrompt = useChatStore((state) => state.systemPrompt);
   const updateSystemPrompt = useChatStore((state) => state.updateSystemPrompt);
-  const prompt = systemPrompt[role] ?? systemPrompt.default;
+  const prompt = systemPrompt[id] ?? systemPrompt.default;
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(prompt);
 
@@ -72,7 +72,7 @@ function PromptEditModal({ role }: { role: string }) {
 }
 
 export default function ChatList({
-  role,
+  id,
   messages,
   isLoading,
   loadingSubmit,
@@ -81,7 +81,7 @@ export default function ChatList({
   return (
     <div className="flex-1 w-full overflow-y-auto mx-auto max-w-3xl">
       <ChatMessageList>
-        <PromptEditModal role={role} />
+        <PromptEditModal id={id} />
         {messages.map((message, index) => (
           <ChatMessage
             key={message.id || index}

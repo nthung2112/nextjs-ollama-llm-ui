@@ -57,7 +57,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
   const selectedModel = useChatStore((state) => state.selectedModel);
   const saveMessages = useChatStore((state) => state.saveMessages);
   const getMessagesById = useChatStore((state) => state.getMessagesById);
-  const role = useChatStore((state) => state.chats[id]?.role);
+  const systemPrompt = useChatStore((state) => state.systemPrompt);
   const router = useRouter();
 
   useEventListener("reset-chat", ({ chatId }) => {
@@ -100,7 +100,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
     const requestOptions: ChatRequestOptions = {
       body: {
         selectedModel,
-        role,
+        system: systemPrompt[id],
       },
       ...(base64Images && {
         data: {
@@ -164,7 +164,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
               const requestOptions: ChatRequestOptions = {
                 body: {
                   selectedModel,
-                  role,
+                  system: systemPrompt[id],
                 },
               };
 

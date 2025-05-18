@@ -35,7 +35,7 @@ function PromptEditModal({ id }: { id: string }) {
   return (
     <>
       <div
-        className="border rounded-lg p-2 max-h-14 overflow-hidden line-clamp-2 text-sm cursor-pointer border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+        className="border rounded-lg px-3 py-2 max-h-14 overflow-hidden line-clamp-2 leading-[1.55] text-sm cursor-pointer border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
         onClick={() => setOpen(true)}
         title={prompt}
       >
@@ -59,7 +59,7 @@ function PromptEditModal({ id }: { id: string }) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => updateSystemPrompt(role, value)}
+                onClick={() => updateSystemPrompt(id, value)}
               >
                 Save Changes
               </Button>

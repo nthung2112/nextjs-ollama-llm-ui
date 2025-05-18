@@ -19,13 +19,14 @@ interface ChatTopbarProps {
   setMessages: (messages: Message[]) => void;
 }
 
+const models = [
+  "gemini-2.0-flash",
+  "gemini-1.5-pro-latest",
+  "gemini-1.5-flash-latest",
+  "gemini-1.5-flash-8b-latest",
+];
+
 export default function ChatTopbar({ isLoading, chatId, messages, setMessages }: ChatTopbarProps) {
-  const models = [
-    "gemini-2.0-flash-001",
-    "gemini-1.5-pro-latest",
-    "gemini-1.5-flash-latest",
-    "gemini-1.5-flash-8b-latest",
-  ];
   const [open, setOpen] = React.useState(false);
   const selectedModel = useChatStore((state) => state.selectedModel);
   const setSelectedModel = useChatStore((state) => state.setSelectedModel);
@@ -35,7 +36,7 @@ export default function ChatTopbar({ isLoading, chatId, messages, setMessages }:
   useEffect(() => {
     // Set default model if none selected
     if (!selectedModel) {
-      setSelectedModel("gemini-2.0-flash-001");
+      setSelectedModel(models[0]);
     }
   }, [selectedModel, setSelectedModel]);
 

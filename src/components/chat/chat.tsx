@@ -57,7 +57,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
   const selectedModel = useChatStore((state) => state.selectedModel);
   const saveMessages = useChatStore((state) => state.saveMessages);
   const getMessagesById = useChatStore((state) => state.getMessagesById);
-  const getRoleById = useChatStore((state) => state.getRoleById);
+  const role = useChatStore((state) => state.chats[id]?.role);
   const router = useRouter();
 
   useEventListener("reset-chat", ({ chatId }) => {
@@ -100,7 +100,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
     const requestOptions: ChatRequestOptions = {
       body: {
         selectedModel,
-        role: getRoleById(id),
+        role,
       },
       ...(base64Images && {
         data: {
@@ -154,6 +154,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
       ) : (
         <>
           <ChatList
+            role={role}
             messages={messages}
             isLoading={isLoading}
             loadingSubmit={loadingSubmit}
@@ -163,7 +164,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
               const requestOptions: ChatRequestOptions = {
                 body: {
                   selectedModel,
-                  role: getRoleById(id),
+                  role,
                 },
               };
 

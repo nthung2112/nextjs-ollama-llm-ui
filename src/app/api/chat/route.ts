@@ -35,7 +35,12 @@ export async function POST(req: Request) {
       ],
     });
 
-    return result.toDataStreamResponse();
+    return result.toDataStreamResponse({
+      getErrorMessage(error) {
+        console.error("Error in streaming:", error);
+        return "An error occurred while processing your request.";
+      },
+    });
   } catch (error) {
     console.error("Error in POST request:", error);
     return new Response("Internal Server Error", { status: 500 });

@@ -1,15 +1,18 @@
 "use client";
 
-import ChatTopbar from "./chat-topbar";
-import ChatList from "./chat-list";
-import ChatBottombar from "./chat-bottombar";
+import React from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Attachment, ChatRequestOptions, generateId } from "ai";
 import { Message, useChat } from "ai/react";
-import React, { useRef } from "react";
 import { toast } from "sonner";
+
 import useChatStore from "@/app/hooks/useChatStore";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+
+import ChatBottombar from "./chat-bottombar";
+import ChatList from "./chat-list";
+import ChatTopbar from "./chat-topbar";
+import { useEventListener } from "@/app/hooks/useCustomEvent";
 
 export interface ChatProps {
   id: string;
@@ -54,11 +57,25 @@ export default function Chat({ initialMessages, id }: ChatProps) {
   const selectedModel = useChatStore((state) => state.selectedModel);
   const saveMessages = useChatStore((state) => state.saveMessages);
   const getMessagesById = useChatStore((state) => state.getMessagesById);
+  const systemPrompt = useChatStore((state) => state.systemPrompt);
   const router = useRouter();
+
+  useEventListener("reset-chat", ({ chatId }) => {
+    if (id !== chatId) {
+      return;
+    }
+    setMessages([]);
+    setInput("");
+    setBase64Images(null);
+    saveMessages(id, []);
+  });
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    window.history.replaceState({}, "", `/c/${id}`);
+
+    if (location.pathname !== `/c/${id}`) {
+      window.history.replaceState({}, "", `/c/${id}`);
+    }
 
     if (!selectedModel) {
       toast.error("Please select a model");
@@ -82,7 +99,8 @@ export default function Chat({ initialMessages, id }: ChatProps) {
 
     const requestOptions: ChatRequestOptions = {
       body: {
-        selectedModel: selectedModel,
+        selectedModel,
+        system: systemPrompt[id],
       },
       ...(base64Images && {
         data: {
@@ -136,6 +154,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
       ) : (
         <>
           <ChatList
+            id={id}
             messages={messages}
             isLoading={isLoading}
             loadingSubmit={loadingSubmit}
@@ -144,7 +163,8 @@ export default function Chat({ initialMessages, id }: ChatProps) {
 
               const requestOptions: ChatRequestOptions = {
                 body: {
-                  selectedModel: selectedModel,
+                  selectedModel,
+                  system: systemPrompt[id],
                 },
               };
 

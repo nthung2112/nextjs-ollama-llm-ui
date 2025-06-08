@@ -5,8 +5,8 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "Ollama UI",
-  description: "Ollama chatbot web interface",
+  title: "NTH Chat",
+  description: "A chat application built with Next.js and Ollama",
 };
 
 const geist = Geist({

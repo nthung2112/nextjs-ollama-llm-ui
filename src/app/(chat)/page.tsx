@@ -20,7 +20,7 @@ export default function Home() {
   const isInitialized = useChatStore((state) => state.isInitialized);
 
   return (
-    <main className="flex h-[calc(100dvh)] flex-col items-center ">
+    <main className="flex h-[calc(100dvh)] flex-col items-center">
       <ChatLayout
         key={id}
         id={id}
